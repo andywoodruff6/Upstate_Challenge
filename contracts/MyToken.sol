@@ -13,8 +13,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
 contract MyToken is ERC20 {
-    constructor(uint256 _totalSupply, uint _startTime, uint _endTime) ERC20("Credit", "CDT") {
-        _mint(msg.sender, _totalSupply);
-        require( block.number > _startTime && block.number < _endTime);
+    constructor() ERC20("Credit", "CDT") {
+        _mint(msg.sender, 6000000 * 10 **decimals());
     }
 }

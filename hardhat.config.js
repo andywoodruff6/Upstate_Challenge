@@ -1,5 +1,5 @@
 require("@nomiclabs/hardhat-waffle");
-require("@nomiclabs/hardhat-ethers");
+// no need to require ethers as waffle already does this.
 
 const { task } = require("hardhat/config");
 const ethers = require('ethers');
@@ -15,7 +15,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-task("tokenBalance", "Prints the balance of an account", async ())
+// task("tokenBalance", "Prints the balance of an account", async ())
 
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
@@ -29,7 +29,6 @@ module.exports = {
   //   apiKey:
   // },
   local: {
-    url: 'http://127.0.0.1:8545/',
-    accounts: [.env.PRIVATE_KEY]
+    url: 'http://127.0.0.1:8545/'
   }
 };
