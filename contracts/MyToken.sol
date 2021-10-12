@@ -9,11 +9,23 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-// tokens can only be transferred after _startTime but before _endTime - provided in constructor
-
-
 contract MyToken is ERC20 {
-    constructor() ERC20("Credit", "CDT") {
-        _mint(msg.sender, 6000000 * 10 **decimals());
+    //Variables
+    uint256 public startTime;
+    uint256 public endTime;
+
+    constructor(uint _startTime, uint _endTime) ERC20("Credit", "CDT") {
+        _mint(msg.sender, 6000 * 10 **decimals());
+        startTime = _startTime;
+        endTime = _endTime;
     }
+
+  /// @dev modified to require transfer is occuring in a specific time window     
+    function transfer(address recipient, uint256 amount) public virtual override returns(bool) {
+        require((block.number > startTime) && (block.number < endTime) , 'Can not trade');
+            console.log("blockNumber:", block.number);
+        super.transfer(recipient, amount);
+        return true;
+    }
+
 }
