@@ -2,9 +2,9 @@
 pragma solidity ^0.8.0;
 
 /**
-@title MyToken
-@author Andy W
-@notice A token with a time window for transferring
+ *@title MyToken
+ *@author Andy W
+ *@notice A token with a time window for transferring
 */
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -14,18 +14,29 @@ contract MyToken is ERC20 {
     uint256 public startTime;
     uint256 public endTime;
 
+    /**
+     *@notice creates an ERC20 token called Credit with a symbol of CDT
+     *@dev    All tests passing as of 10/12/21
+     *@param  _startTime is a uint block number
+     *@param  _endTime   is a uint block number
+    */
     constructor(uint _startTime, uint _endTime) ERC20("Credit", "CDT") {
         _mint(msg.sender, 6000 * 10 **decimals());
         startTime = _startTime;
         endTime = _endTime;
     }
 
-  /// @dev modified to require transfer is occuring in a specific time window     
+  /** 
+   *@notice transfer function has been modified to limit transfers to a specific timeframe
+   *@dev    start and end times are set in the constructor
+   *@param  recipient the address of the person recieving the transfer
+   *@param  amount the number of tokens to be transferred
+   *@return same as standard transfer function bool
+  */
     function transfer(address recipient, uint256 amount) public virtual override returns(bool) {
         require((block.number > startTime) && (block.number < endTime) , 'Can not trade');
             console.log("blockNumber:", block.number);
         super.transfer(recipient, amount);
         return true;
     }
-
 }
