@@ -1,4 +1,9 @@
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-ethers");
+
+const { task } = require("hardhat/config");
+const ethers = require('ethers');
+
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -10,6 +15,8 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
+task("tokenBalance", "Prints the balance of an account", async ())
+
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -18,4 +25,11 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.4",
+  // etherscan: {
+  //   apiKey:
+  // },
+  local: {
+    url: 'http://127.0.0.1:8545/',
+    accounts: [.env.PRIVATE_KEY]
+  }
 };
