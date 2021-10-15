@@ -1,9 +1,7 @@
-# Basic Sample Hardhat Project
+# Basic Hardhat Project
+### Code Challenge
 
-
-### TEST
-
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+This project demonstrates a basic Hardhat use case. It has am ERC20 token contract, and a contribution contract. The contribution contract is designed to recieve ETH and return tokens. The contract also stores the contributions and allows for an address query to see the amount of ETH contributed. 
 
 Try running some of the following tasks:
 
