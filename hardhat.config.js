@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 // no need to require ethers as waffle already does this.
+const ROPSTEN_PRIVATE_KEY = '38cb085c21874c4af5794c6620591efcf966b6f6b7a62dec0a4bfa0b748c1052';
+const ROPSTEN_INFURA_API_KEY = '1ae5438793134f909cf8ffec051bd3a3';
 
 const { task } = require("hardhat/config");
 const ethers = require('ethers');
@@ -28,7 +30,13 @@ module.exports = {
   // etherscan: {
   //   apiKey:
   // },
-  local: {
-    url: 'http://127.0.0.1:8545/'
+  networks: {
+    local: {
+      url: 'http://127.0.0.1:8545/'
+    },
+    ropsten: {
+      url: `https://eth-ropsten.alchemyapi.io/v2/${ROPSTEN_INFURA_API_KEY}`,
+      accounts: [`0x${ROPSTEN_PRIVATE_KEY}`],
+    },
   }
 };

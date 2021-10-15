@@ -1,6 +1,8 @@
 const { expect } = require("chai");
-const startTime = 3;
-const endTime   = 12;
+const startTime = 6;
+const endTime   = 17000000;
+const rate = 10;
+const contractAddr =0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512;
 
 describe("Token contract", function () {
 
@@ -15,9 +17,11 @@ describe("Token contract", function () {
   beforeEach(async function () {
 
     Token = await ethers.getContractFactory("MyToken");
+    Contribution = await ethers.getContractFactory("Contribution");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     hardhatToken = await Token.deploy(startTime, endTime);
+    hhContribute = await Contribution.deploy(rate);
   });
 
   describe("Deployment", function () {
@@ -78,11 +82,23 @@ describe("Token contract", function () {
     });
 
     // This is being called after block 12 and will fail and return
-    // "Can not trade". The test will pass if so. 
-    it("Should fail when block after endTime", async function () {
-        await expect(hardhatToken.transfer(addr1.address, 50))
-            .to.be.revertedWith("Can not trade");
-    });
+    // "Can not trade". The test will pass if so. Set endTime to 17 to test this.
+    // it("Should fail when block after endTime", async function () {
+    //     await expect(hardhatToken.transfer(addr1.address, 50))
+    //         .to.be.revertedWith("Can not trade");
+    // });
 
   });
+
+  describe("Contribution contract",  () => {
+    
+      it("Should transfer tokens to the Contribution contract", async () => {
+      // Transfer 50 tokens from owner to addr1
+      await hardhatToken.transfer(0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512, 5000);
+      
+    });
+      
+  });
+
+
 });
