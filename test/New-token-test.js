@@ -1,49 +1,53 @@
 const tokenError = 'VM Exception while processing transaction: reverted with reason string \'Can not trade\'';
 const { assert, expect } = require("chai");
-let startTime    = 1;
-let endTime      = 100;
 const name       = "Credit";
 const symbol     = 'CDT';
 
-describe('Token Contract', () => {
-
+describe("tx window", () => {
     let Token;
     let token;
     let owner;
     let addr1;
     let addr2;
     let addrs;
+    let startTime
+    let endTime
 
-    describe('Limiting transactions to a certain window',  () => {
+    describe('Limiting transactions to a certain window', () => {
         //Setup
-        startTime = 4;
-        endTime   = 7;
+        startTime = 2;
+        endTime   = 4;
 
-        beforeEach( async () => {
+        before( async () => {
             Token = await ethers.getContractFactory('MyToken');
             [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
             token = await Token.deploy(startTime, endTime);
         });
-
-        describe('window testing', () => {
-
-            it('prevents tx before start', async () => {
-                await expect(token.transfer(addr1.address, 1000000)).to.be.revertedWith(tokenError);
-            });
-            it('allows tx during window', async () => {
-                await token.transfer(addr1.address, 1000000)
-
-                const expected = '1000000';
-                const result   = await token.balanceOf(addr1.address);
-                assert.equal(expected, result);
-            });
-            it('prevents tx after end', async () => {
-                await expect(token.transfer(addr1.address, 1000000)).to.be.revertedWith(tokenError);
-            });
+        
+        it('prevents tx before start', async () => {
+            await expect(token.transfer(addr1.address, 1000000)).to.be.revertedWith(tokenError);
         });
+
+        it('allows tx during window', async () => {
+            await token.transfer(addr1.address, 1000000)
+            const expected = '1000000';
+            const result   = await token.balanceOf(addr1.address);
+            assert.equal(expected, result);
+        });
+        
+        it('prevents tx after end', async () => {
+            await expect(token.transfer(addr1.address, 1000000)).to.be.revertedWith(tokenError);
+        });
+
     });
+});
+
+describe('Token Contract', () => {
 
     beforeEach( async () => {
+        startTime = 1;
+        endTime   = 100;
+
         Token = await ethers.getContractFactory('MyToken');
         [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
@@ -72,5 +76,13 @@ describe('Token Contract', () => {
             assert.equal(expected, result);
         });
     });
+    describe('Check events', () => {
 
+        it('checks if transfer emits an event', async () => {
+            await expect(token.transfer(addr1.address, 1000000))
+            .to.emit(token, "Transfer")
+            .withArgs(owner.address, addr1.address, 1000000);
+        });
+        
+    });
 })
