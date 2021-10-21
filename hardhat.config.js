@@ -1,4 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-web3");
+
 // no need to require ethers as waffle already does this.
 const ROPSTEN_PRIVATE_KEY = '38cb085c21874c4af5794c6620591efcf966b6f6b7a62dec0a4bfa0b748c1052';
 const ROPSTEN_INFURA_API_KEY = '1ae5438793134f909cf8ffec051bd3a3';
