@@ -1,4 +1,5 @@
-const { assert } = require("chai");
+const tokenError = 'VM Exception while processing transaction: reverted with reason string \'Can not trade\'';
+const { assert, expect } = require("chai");
 let startTime    = 1;
 let endTime      = 100;
 const name       = "Credit";
@@ -12,6 +13,35 @@ describe('Token Contract', () => {
     let addr1;
     let addr2;
     let addrs;
+
+    describe('Limiting transactions to a certain window',  () => {
+        //Setup
+        startTime = 4;
+        endTime   = 7;
+
+        beforeEach( async () => {
+            Token = await ethers.getContractFactory('MyToken');
+            [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+            token = await Token.deploy(startTime, endTime);
+        });
+
+        describe('window testing', () => {
+
+            it('prevents tx before start', async () => {
+                await expect(token.transfer(addr1.address, 1000000)).to.be.revertedWith(tokenError);
+            });
+            it('allows tx during window', async () => {
+                await token.transfer(addr1.address, 1000000)
+
+                const expected = '1000000';
+                const result   = await token.balanceOf(addr1.address);
+                assert.equal(expected, result);
+            });
+            it('prevents tx after end', async () => {
+                await expect(token.transfer(addr1.address, 1000000)).to.be.revertedWith(tokenError);
+            });
+        });
+    });
 
     beforeEach( async () => {
         Token = await ethers.getContractFactory('MyToken');
@@ -42,4 +72,5 @@ describe('Token Contract', () => {
             assert.equal(expected, result);
         });
     });
+
 })
