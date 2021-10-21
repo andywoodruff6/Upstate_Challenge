@@ -39,9 +39,9 @@ contract MyToken is ERC20 {
    *@return same as standard transfer function bool
   */
     function transfer(address recipient, uint256 amount) public virtual override returns(bool) {
-        console.log('Trying to send %s tokens to %s from ', amount, recipient, msg.sender);
+        //console.log('Trying to send %s tokens to %s from ', amount, recipient, msg.sender);
         require((block.number > startTime) && (block.number < endTime) , 'Can not trade');
-            console.log("blockNumber:", block.number);
+            // console.log("blockNumber:", block.number);
         super.transfer(recipient, amount);
         return true;
     }
