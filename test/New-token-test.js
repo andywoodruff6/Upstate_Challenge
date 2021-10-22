@@ -39,7 +39,7 @@ describe('Limiting transactions to a certain window', () => {
 
 describe('Token Contract', () => {
 
-    beforeEach( async () => {
+    before( async () => {
         startTime = 1;
         endTime   = 100;
 
@@ -83,7 +83,7 @@ describe('Token Contract', () => {
 });
 
 describe('Contribution Contract', () => {
-    beforeEach( async () => {
+    before( async () => {
         startTime = 1;
         endTime   = 100;
 
@@ -112,6 +112,7 @@ describe('Contribution Contract', () => {
             // setup
             const amount = 2000
             const expected = (amount * rate);
+            await token.approve()
             // exercise
             await addr2.sendTransaction({to: contract.address, value: amount})
             const result = await token.balanceOf(addr2.address);
