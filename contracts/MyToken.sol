@@ -28,6 +28,7 @@ contract MyToken is ERC20 {
         _mint(msg.sender, 6000 * 10 **decimals());
         startTime = _startTime;
         endTime = _endTime;
+            console.log(_startTime, _endTime);
         emit contractTimeStarttoEnd(_startTime, _endTime); // emits two block.number
     }
 
@@ -41,7 +42,7 @@ contract MyToken is ERC20 {
     function transfer(address recipient, uint256 amount) public virtual override returns(bool) {
         //console.log('Trying to send %s tokens to %s from ', amount, recipient, msg.sender);
         require((block.number > startTime) && (block.number < endTime) , 'Can not trade');
-            // console.log("blockNumber:", block.number);
+            console.log("blockNumber:", block.number);
         super.transfer(recipient, amount);
         return true;
     }

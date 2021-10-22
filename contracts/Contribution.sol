@@ -25,27 +25,28 @@ contract Contribution {
     // VARIABLES //
     uint256 public conversionRate; // Give 1000 Credits per 1 ETH
     uint256 public reward;
-    mapping(address => uint256) public amountOfETHContributed;
+    mapping(address => uint) public balances;
 
     constructor(uint256 _conversionRate) {
         conversionRate = _conversionRate;
     }
 
-    function contribute() payable external {
+    receive() payable external {
         MyToken token = MyToken(0x5FbDB2315678afecb367f032d93F642f64180aa3);
         reward = (msg.value * conversionRate);
         token.transfer(msg.sender, reward); //this sends tokens from the contract to the sender
         _storeContribution(msg.sender, msg.value);
+        emit Contribute(msg.sender, msg.value);
     }
 
     function _storeContribution (address _person, uint256 _amount) internal {
         ledger.push(Ledger( _person, _amount ));
-        amountOfETHContributed[_person] = _amount;
+        balances[_person] += _amount;
     }
 
     function contributionCheck( address _user) external returns( uint amount ) {
-        amountOfETHContributed[_user] = amount;
+        balances[_user] = amount;
+        emit Check(_user, amount);
         return(amount);
-      // emit Check(address, ###)
     }
 }
